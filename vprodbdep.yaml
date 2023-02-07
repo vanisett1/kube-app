@@ -1,0 +1,40 @@
+appVersion: v1
+kind: Deployment
+metadata:
+  name: vprodb
+spec:
+  selector:
+    matchLabels:
+      app: vprodb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vprodb
+    spec:
+      containers:
+      - name: vprodb
+        image: vanisetti/vprofiledb
+        args:
+          - "ignore-db-dir=lost+found"
+        volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: vrpo-db-data
+        ports:
+          - name: vprodb-port
+            containerPort: 3306
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: db-pass
+    nodeSelector:
+      zone: us-east-2a
+    volumes:
+      - name: vpro-db-data
+        awsElasticBlockStore:
+          volumeID: vol-0cfe7915b05788b6e
+          fsType: ext4
+
+
