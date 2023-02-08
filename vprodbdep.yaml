@@ -1,4 +1,4 @@
-appVersion: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vprodb
@@ -21,8 +21,8 @@ spec:
             - mountPath: /var/lib/mysql
               name: vpro-db-data
           ports:
-            - name: vprodb-port
-              containerPort: 3306
+           - name: vprodb-port
+             containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -35,6 +35,7 @@ spec:
         - name: vpro-db-data
           awsElasticBlockStore:
             volumeID: vol-0cfe7915b05788b6e
-            fsType:
+            fsType: ext4
+
 
 
